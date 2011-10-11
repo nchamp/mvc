@@ -1,3 +1,4 @@
+<<<<<<< HEAD:models/RecipeBookRecipes.php
 <?php
 
 require_once(LIBRARY_PATH . DS . 'Database.php');
@@ -102,8 +103,7 @@ class RecipeBookRecipes {
 	* @param array $data The POSTed data.
 	* @return int Returns id of the inserted row (or throws an Exception)
 	*/
-   public static function create(array $data) { 
-      // TODO could do a check here to ensure data exists 
+   public static function create(array $data) {  
 
 	  $sql  = 'INSERT INTO RecipeBookRecipes (RecipeID, BookID) VALUES (?, ?)';
 	  $values = array(
@@ -126,7 +126,7 @@ class RecipeBookRecipes {
 		exit; 
 	  }
 	  if ($return) {
-         return $id;  
+         return $RecipeID;  
 	  }
 	  return false;
    }
@@ -139,7 +139,6 @@ class RecipeBookRecipes {
 	* @return int bool Whether update was successful or not. 
 	*/
    public static function update($RecipeID, array $data) {
-      // TODO could do a check here to ensure data exists
 
 	  $sql  = 'UPDATE RecipeBookRecipes SET RecipeID = ?, BookID = ?';
 	  $values = array(  
@@ -160,7 +159,29 @@ class RecipeBookRecipes {
 	  }
 	  return $return;
    }
+   
+   public static function delete($BookID, array $data) {
+   
+      $sql = 'DELETE FROM RecipeBookRecipes WHERE BookID = ?';
+	  $values = array(
+         $data['RecipeID'],
+		 $data['BookID']
+	  );
 
+	  try {
+         $database = Database::getInstance();
+
+		 $statement = $database->pdo->prepare($sql);
+		 $return = $statement->execute($values);
+
+         $database->pdo = null;
+	  } catch (PDOException $e) { 
+	    echo $e->getMessage(); 
+		exit;
+	  }
+	  return $return;
+   }
+   
 }
 
 ?>

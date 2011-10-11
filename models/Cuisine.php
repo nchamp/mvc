@@ -1,3 +1,4 @@
+<<<<<<< HEAD:models/Cuisine.php
 <?php
 
 require_once(LIBRARY_PATH . DS . 'Database.php');
@@ -98,7 +99,6 @@ require_once(LIBRARY_PATH . DS . 'Database.php');
 	* @return int Returns CuisineID of the inserted row (or throws an Exception)
 	*/
    public static function create(array $data) {
-      // TODO could do a check here to ensure data exists
 
 	  $sql  = 'INSERT INTO Cuisine (CuisineName) VALUES (?)';
 	  $values = array( 
@@ -133,11 +133,10 @@ require_once(LIBRARY_PATH . DS . 'Database.php');
 	* @return int bool Whether update was successful or not.
 	*/
    public static function update($CuisineID, array $data) {
-      // TODO could do a check here to ensure data exists
 
 	  $sql = 'UPDATE Cuisine SET CuisineName = ? WHERE CuisineID = ?';
 	  $values = array(
-         $data['CuisineName']
+         $data['CuisineName'],
 		 $CuisineID
 	  );
 
@@ -151,6 +150,28 @@ require_once(LIBRARY_PATH . DS . 'Database.php');
 	  } catch (PDOException $e) {
         echo $e->getMessage(); 
 		exit; 
+	  }
+	  return $return;
+   }
+   
+   public static function delete($CuisineID, array $data) {
+      
+      $sql = 'DELETE FROM Cuisine WHERE CuisineID = ?';
+	  $values = array(
+	     $data['CuisineName'],
+		 $CuisineID  
+	  );
+	  
+	  try { 
+	     $database = Database::getInstance();  
+		 
+		 $statement = $database->pdo->prepare($sql);
+		 $return = $statement->execute($values);
+		 
+		 $database->pdo = null; 
+	  } catch (PDOException $e) {
+	    echo $e->getMessage();
+		exit;
 	  }
 	  return $return;
    }

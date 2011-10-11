@@ -1,3 +1,4 @@
+<<<<<<< HEAD:models/User.php
 <?
 
 require_once(LIBRARY_PATH . DS . 'Database.php');
@@ -120,14 +121,14 @@ Class User {
 	*/
    public static function create(array $data) {
 
-      // assumes all new users will not be admin 
-      $sql = 'INSERT INTO User (Email, Nickname, Password, Birthdate, AvatarLink, IsAdmin) VALUES (?, ?, ?, ?, ?, 0)';
+      $sql = 'INSERT INTO User (Email, Nickname, Password, Birthdate, AvatarLink, IsAdmin) VALUES (?, ?, ?, ?, ?, ?)';
 	  $values = array(
          $data['Email'],
 		 $data['Nickname'],
 		 $data['Password'],
 		 $data['Birthdate'],
-         $data['AvatarLink']
+         $data['AvatarLink'],
+		 $data['IsAdmin']
 	  );
 	  try {
          $database = Database::getInstance();
@@ -158,14 +159,14 @@ Class User {
 	*/
    public static function update($UserID, array $data) {
 
-	  // assumes all new users will not be admin
-	  $sql  = 'UPDATE User SET Email = ?, Nickname = ?, Password = ?, Birthdate = ?, AvatarLink = ? WHERE UserID = ?';
+	  $sql  = 'UPDATE User SET Email = ?, Nickname = ?, Password = ?, Birthdate = ?, AvatarLink = ?, IsAdmin = ? WHERE UserID = ?';
 	  $values = array(
          $data['Email'],
 		 $data['Nickname'],
 		 $data['Password'],
 		 $data['Birthdate'],
          $data['AvatarLink'],
+		 $data['IsAdmin'],
 		 $UserID
       );
 	  try {
@@ -179,6 +180,33 @@ Class User {
         echo $e->getMessage(); 
 		exit; 
 	  }
+	  return $return;
+   }
+   
+   public static function delete($UserID, array $data) {
+   
+      $sql = 'DELETE FROM User WHERE UserID = ?';
+	  $values = array(
+         $data['Email'],
+		 $data['Nickname'],
+		 $data['Password'],
+		 $data['Birthdate'],
+         $data['AvatarLink'],
+         $data['IsAdmin'],
+ 		 $UserID
+	  );
+
+	  try {  
+	     $database = Database::getInstance();
+
+		 $statement = $database->pdo->prepare($sql);
+		 $return = $statement->execute($values);
+
+         $database->pdo = null;
+	  } catch (PDOException $e) {
+        echo $e->getMessage();
+		exit;
+	  } 
 	  return $return;
    }
 

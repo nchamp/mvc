@@ -30,13 +30,14 @@ if (!$routed) {
 }
 
 $controller = ucfirst($route['controller']) . 'Controller';
+
 $action = $route['action'];
 $params = array();
 if (isset($matches[1])) {
   $params['id'] = $matches[1];
 }
 
-require_once(APP_PATH . '/controllers/' . $controller . '.php');
+require_once(APP_PATH . DS . 'controllers' . DS . $controller . '.php');
 
 $dispatch = new $controller();
 

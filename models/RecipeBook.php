@@ -1,3 +1,4 @@
+<<<<<<< HEAD:models/RecipeBook.php
 <?php
 
 require_once(LIBRARY_PATH . DS . 'Database.php');
@@ -104,7 +105,6 @@ class RecipeBook {
 	* @return int Returns BookID of the inserted row (or throws an Exception) 
 	*/
    public static function create(array $data) {
-      // TODO could do a check here to ensure data exists
 
 	  $sql  = 'INSERT INTO RecipeBook (UserID, Name) VALUES (?, ?)';
 	  $values = array( 
@@ -140,7 +140,6 @@ class RecipeBook {
 	* @return int bool Whether update was successful or not.  
 	*/
    public static function update($BookID, array $data) {
-      // TODO could do a check here to ensure data exists
 
 	  $sql  = 'UPDATE RecipeBook SET UserID = ?, Name = ? WHERE BookID = ?';
 	  $values = array(
@@ -159,6 +158,29 @@ class RecipeBook {
 	  } catch (PDOException $e) { 
    	    echo $e->getMessage();
 		exit; 
+	  }
+	  return $return;
+   }
+   
+   public static function delete($BookID, array $data) {
+   
+      $sql = 'DELETE FROM RecipeBook WHERE BookID = ?';
+	  $values = array( 
+	     $data['UserID'],
+		 $data['Name'],
+		 $BookID
+	  );
+	  
+	  try {
+	     $database = Database::getInstance();
+		 
+		 $statement = $database->pdo->prepare($sql);
+		 $return = $statement->execute($values);
+		 
+		 $database->pdo = null;
+	  } catch (PDOException $e) {
+	    echo $e->getMessage();
+		exit;
 	  }
 	  return $return;
    }

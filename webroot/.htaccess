@@ -1,7 +1,7 @@
 <IfModule mod_rewrite.c>
   RewriteEngine On
   
-  RewriteBase /~e46762/wda/mvc/webroot
+  RewriteBase /wda-assign-2/webroot
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !favicon.ico$

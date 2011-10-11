@@ -19,3 +19,5 @@ $routes['#^/things/([0-9]{1,5})$#i'] = array('controller' => 'things', 'action' 
 $routes['#^/things/([0-9]{1,5})/edit$#i'] = array('controller' => 'things', 'action' => 'edit');
 $routes['#^/things/([0-9]{1,5})/update$#i'] = array('controller' => 'things', 'action' => 'edit');
 
+//View recipe
+$routes['#^/recipes/([0-9]{1,5})$#i'] = array('controller' => 'recipe', 'action' => 'show');

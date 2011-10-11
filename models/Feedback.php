@@ -1,3 +1,4 @@
+<<<<<<< HEAD:models/Feedback.php
 <?php
 
 require_once(LIBRARY_PATH . DS . 'Database.php');
@@ -107,7 +108,6 @@ class Feedback {
 	* @return int Returns FeedbackID of the inserted row (or throws an Exception)
 	*/
    public static function create(array $data) {
-      // TODO could do a check here to ensure data exists
 
 	  $sql = 'INSERT INTO Feedback (UserID, RecipeID, CommentText) VALUES (?, ?, ?)';
 	  $values = array(  
@@ -143,8 +143,7 @@ class Feedback {
 	* @param array $data The POSTed data. 
 	* @return int bool Whether update was successful or not.  
 	*/
-   public static function update($FeedbackID, array $data) { 
-      // TODO could do a check here to ensure data exists 
+   public static function update($FeedbackID, array $data) {  
 
 	  $sql  = 'UPDATE Feedback SET UserID = ?, RecipeID = ?, CommentText = ? WHERE FeedbackID = ?, DateCreated = ?';
 	  $values = array(  
@@ -163,6 +162,31 @@ class Feedback {
          $database->pdo = null;
 	  } catch (PDOException $e) {
         echo $e->getMessage();
+		exit;
+	  }
+	  return $return;
+   }
+   
+   public static function delete($FeedbackID, array $data) { 
+   
+      $sql = 'DELETE FROM Feedback WHERE FeedbackID = ?';
+	  $values = array( 
+	     $data['UserID'],
+		 $data['RecipeID'],
+		 $data['CommentText'],
+		 $FeedbackID,
+		 $DateCreated
+	  );
+	  
+	  try {
+	     $database = Database::getInstance();
+		 
+		 $statement = $database->pdo->prepare($sql);
+		 $return = $statement->execute($values);
+		 
+		 $database->pdo = null;
+	  } catch (PDOException $e) {  
+	    echo $e->getMessage(); 
 		exit;
 	  }
 	  return $return;

@@ -4,10 +4,10 @@
 
 class Database {
 
-   private static $db_host       = 'yallara.cs.rmit.edu.au'; 
+   private static $db_host       = 'localhost'; 
    private static $db_port       = '57192';
    private static $db_name       = 'recipebook'; 
-   private static $db_username   = 'root';
+   private static $db_username   = 'rbUser';
    private static $db_password   = '20110720';
    private static $instance;  
    public $dsn;  
