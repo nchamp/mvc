@@ -83,12 +83,15 @@ class Recipe {
     * A method for retrieving recipes from the Recipe table.
 	*
 	* @param array $data An optional array of key:value pairs to be used as
-	*                    parameters in the SQL query.  
+	*                    parameters in the SQL query.
+    *        int $upperlim An optional integer value of the upper limit of returned
+    *        			  results
+    *        int $lowerlim An optional integer value of the lower limit of returned
+    *        			  results
 	* @return array An array of database Objects where each Object represents a 
 	*               recipe.
 	*/
-   public static function retrieve(array $data = array()) { 
-
+   public static function retrieve(array $data = array(),$upperlim = null, $lowerlim = null) { 
       $sql = 'SELECT * FROM Recipe';
 	  $values = array();
 	  if (count($data)) {
@@ -127,6 +130,57 @@ class Recipe {
 	  }
    }
 
+   /**
+   * A method for searching for recipes from the Recipe table.
+   * This uses the SQL 'LIKE' command to search for the best matches to the criteria
+   *
+   * @param array $data An optional array of key:value pairs to be used as
+   *                    parameters in the SQL query.
+   *        int $upperlim An optional integer value of the upper limit of returned
+   *        			  results
+   *        int $lowerlim An optional integer value of the lower limit of returned
+   *        			  results
+   * @return array An array of database Objects where each Object represents a
+   *               recipe.
+   */   
+   public static function search(array $data = array(),$upperlim = null, $lowerlim = null) {
+   	$sql = 'SELECT * FROM Recipe';
+   	$values = array();
+   	if (count($data)) {
+   		$count = 0;
+   		foreach ($data as $key => $value) {
+   			if ((++$count) == 1) {
+   				$sql .= " WHERE {$key} = ?";
+   				$values[] = '%'.$value.'%';
+   			} else {
+   				$sql .= " AND {$key} = ?";
+   				$values[] = '%'.$value.'%';
+   			}
+   		}
+   	}
+   
+   	try {
+   		$database = Database::getInstance();
+   
+   		$statement = $database->pdo->prepare($sql);
+   
+   		$statement->execute($values);
+   		// result is FALSE if no rows found
+   		$result = $statement->fetchAll(PDO::FETCH_OBJ);
+   
+   		$database->pdo = null;
+   	} catch (PDOException $e) {
+   		echo $e->getMessage();
+   		exit;
+   	}
+   	if (count($result) > 1) {
+   		return $result;
+   	} else if (count($result) == 1) {
+   		return $result[0];
+   	} else {
+   		return NULL;
+   	}
+   }
    /**
     * Writes a new row to the Recipe table based on given data.
 	*

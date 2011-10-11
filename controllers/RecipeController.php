@@ -34,34 +34,55 @@ class RecipeController{
 		$this->template->id = $id;
 		
 		//Get the recipe from the database
-		$recipes = Recipe::retrieve(array("id"=>$id));
+		$recipes = Recipe::retrieve(array("RecipeID"=>$id));
 		//If successful and the count is equal to one (as desired)
 		//set the recipe object in the template to be displayed
 		if(count($recipes) == 1){
-			$this->template->recipe = $recipes[0];
+			$this->template->recipe = $recipes;
 		}
 		
-		$this->template->display('show.html.php');		
+		$this->template->display('show.html.php');
 	}
 	
 	/**
-	* Show recipe search results (From POST parameteres)
+	* Function to show all recipes
 	*
-	* @param: $criteria Associative array consisting of key=Field value=Criteria
+	* @param: None
 	* @return: None
 	*/
-	public function show($criteria){
-		$this->template->id = $id;
+	public function all(){	
+		//Get ALL recipes from the database, but limit the search according to the 
+		//GET parameters outlining upper and lowerl imits
+		$recipes = Recipe::retrieve();
+		//Set the recipes results to the template and display
+		$this->template->recipes = $recipes;
+		$this->template->display('all.html.php');
+	}
 	
+	
+	/**
+	* Function for recipe search (From POST parameteres)
+	*
+	* If POST parameters are sent, then perform search
+	* If no POST parameters exist in the HTTP request, display the search controls/form
+	*
+	* @param: None
+	* @return: None
+	*/
+	public function search(){
+		//Test if the POST parameters exist. If they don't present the user with the
+		//search controls/form
+		if(!isset($_POST["search"])){
+			$this->template->display('search.html.php');			
+		}
+		
 		//Get the recipe from the database
-		$recipes = Recipe::retrieve(array("id"=>$id));
+		$recipes = Recipe::search($_POST["search"]);
 		//If successful and the count is equal to one (as desired)
 		//set the recipe object in the template to be displayed
-		if(count($recipes) == 1){
-			$this->template->recipe = $recipes[0];
-		}
+		$this->template->recipes = $recipes;
 	
-		$this->template->display('show.html.php');
+		$this->template->display('results.html.php');
 	}
 	
 }

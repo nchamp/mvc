@@ -5,7 +5,7 @@
 class Database {
 
    private static $db_host       = 'localhost'; 
-   private static $db_port       = '57192';
+   private static $db_port       = '3306';
    private static $db_name       = 'recipebook'; 
    private static $db_username   = 'rbUser';
    private static $db_password   = '20110720';
